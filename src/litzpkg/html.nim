@@ -523,18 +523,14 @@ proc parse_children(writer: StmtListWriter, context: ParseContext,
               context.mode = blockmode
               if context.depth != -1:
                   writer.add_literal("\n")
-          let
-              childName = if len(node[0]) > 1:
-                echo repr $toStrLit(node[0])
-                # toLower(
-                #   toSeq(node[0].children).map(
-                #     proc(tagPart: NimNode): cstring = $tagPart
-                #   ).join("")
-                # ) 
-                "foo"
-              else: 
-                toLower(node[0].first_ident)
-              childTag  = tagIdFor(childName)
+          var childName: string
+          if len(node[0]) > 1 and node[0].kind == nnkAccQuoted:
+            childName = toLower(node[0][0].ident_name)
+            for i in 1 .. node[0].len-1:
+              childName.add toLower(node[0][i].ident_name)
+          else: 
+            childName = toLower(node[0].first_ident)
+          var childTag  = tagIdFor(childName)
 
           if childTag == unknownTag:
               quit_unknown(node[0], "tag", childName)

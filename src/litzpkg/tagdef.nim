@@ -153,18 +153,20 @@ macro tagList*(content: untyped): untyped =
       var childrenList: NimNode
       case child[0].kind:
       of nnkPar:
-        childrenList = child[0]
+          childrenList = child[0]
       of nnkIdent, nnkAccQuoted:
-        if len(child) > 1 and child[1].kind == nnkIdent:
-          childrenList = newNimNode(nnkPar)
-          for innerChild in child:
-            if innerChild.kind == nnkIdent:
-              childrenList.add(innerChild)
+        childrenList = newNimNode(nnkPar)
+
+        if len(child) > 1 and child[0].kind == nnkAccQuoted:
+          var t: string = $child[0][0]
+          for i in 1 ..< len(child[0]):
+            t.add($child[0][i])
+          childrenList.add(t.ident)
         else:
-          childrenList = newNimNode(nnkPar).add(child[0])
-          
+          childrenList.add(child[0])
+
       else:
-        quit("Invalid child: " & $child[0].kind)
+          quit("Invalid child: " & $child[0].kind)
       
       if child[0].kind == nnkIdent and strVal(child[0]) == "global":
         # process global tags, i.e. build is_global_attr and is_bool_attr
@@ -365,3 +367,5 @@ macro tagList*(content: untyped): untyped =
     injectedAttrs[6].add(injectedAttrsCase)
   else:
     injectedAttrs[6].add(newNimNode(nnkDiscardStmt).add(newEmptyNode()))
+
+  # echo repr result

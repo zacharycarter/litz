@@ -347,5 +347,5 @@ tag_list:
       optional_attrs     = (autoplay, buffered, controls, crossorigin,
                             height, loop, muted, played, preload, poster,
                             src, width)
-  lit-router:
+  `lit-router`:
     content_categories = script_supporting_content
