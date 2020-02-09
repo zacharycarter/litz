@@ -12,7 +12,7 @@ backend       = "js"
 
 # Dependencies
 
-requires "nim >= 0.18.1"
+requires "nim >= 0.20.0"
 requires "https://github.com/yglukhov/nim-only-uuid.git"
 
 
