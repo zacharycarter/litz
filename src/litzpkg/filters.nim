@@ -1,4 +1,4 @@
-import strtabs, strutils
+import strutils
 
 proc lit*(html: var string, val: string) =
   html = "`$1`" % val
@@ -15,17 +15,17 @@ proc escape_html*(html: string, val: string, escapeQuotes = false): string =
     of '<': result &= "&lt;"
     of '>': result &= "&gt;"
     of '"':
-        if escapeQuotes: result &= "&quot;"
-        else: result &= "\""
+      if escapeQuotes: result &= "&quot;"
+      else: result &= "\""
     of '\'':
-        if escapeQuotes: result &= "&#39;"
-        else: result &= "'"
+      if escapeQuotes: result &= "&#39;"
+      else: result &= "'"
     else:
       result &= c
 
 proc change_indentation*(html: string, value: string,
   indentation: string): string =
-  
+
   result = html
 
   var
